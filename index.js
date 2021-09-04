@@ -1,7 +1,36 @@
+require('dotenv').config();
+
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 8888;
 
+/**
+ * @description   list of white IP address
+ */
+const whiteList = [
+  process.env.NODE_ENV == 'production'
+    ? console.log('production')
+    : `http://localhost:${PORT}/`,
+  'http://localhost:4200',
+];
+
+/**
+ * @description   enable cors middleware
+ */
+const corsOption = {
+  origin: (origin, callback) => {
+    console.log('***Request Origin ' + origin);
+    if (whiteList.indexOf(origin) !== -1 || !origin) {
+      console.log('Origin Request Granted!');
+      callback(null, true);
+    } else {
+      console.log('Invalid Origin Request!');
+      callback(new Error('Invalid Error'));
+    }
+  },
+};
+app.use(cors(corsOption));
 app.use(express());
 app.use(express.json({ extended: false }));
 
