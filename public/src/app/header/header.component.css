@@ -1,0 +1,68 @@
+#navbar {
+  width: 100%;
+  height: auto;
+  margin: 0 0px;
+  padding: 0px 0%;
+  background-color: lightgreen;
+}
+
+#justify {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#link {
+  margin: 10px 1rem;
+  padding: 5px 15px;
+}
+
+button {
+  color: #fff;
+  font-weight: bold;
+  border: burlywood;
+  border-radius: 3px;
+  background-color: coral;
+}
+
+button:hover {
+  color: #000;
+  background-color: darksalmon;
+  cursor: pointer;
+}
+
+/* 700px screen for mobile  */
+@media only screen and (max-width: 700px) {
+  mat-toolbar {
+    width: fit-content;
+    height: fit-content;
+  }
+
+  #justify {
+    margin: 1 1;
+  }
+
+  a {
+    color: #fff;
+    font-size: larger;
+  }
+
+  #link {
+    margin: 10px;
+    padding: 10px 15px;
+  }
+
+
+  #justify,
+  #buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+}
