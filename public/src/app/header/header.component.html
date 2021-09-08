@@ -1,9 +1,23 @@
-<mat-toolbar id="navbar">
-  <div id="justify">
-    <a id="link">School Management System</a>
-    <div id="buttons">
-      <button id="link">Login</button>
-      <button id="link">Register</button>
-    </div>
-  </div>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button
+      (click)="drawer.toggle()"
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with menu icon"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>School Management System</span>
+  </mat-toolbar-row>
 </mat-toolbar>
+
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <h1>w</h1>
+  </mat-drawer>
+  <h1>hello</h1>
+  <!-- <div class="example-sidenav-content">
+    <button type="button" mat-button>Toggle sidenav</button>
+  </div> -->
+</mat-drawer-container>
