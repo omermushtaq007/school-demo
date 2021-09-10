@@ -2,14 +2,17 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const connect = require('./database');
 const app = express();
 const PORT = process.env.PORT || 8888;
+
+connect(); // database
 
 /**
  * @description   list of white IP address
  */
 const whiteList = [
-  process.env.NODE_ENV == 'production'
+  process.env.NODE_ENV === 'production'
     ? console.log('production')
     : `http://localhost:${PORT}/`,
   'http://localhost:4200',
@@ -47,5 +50,5 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.get('*', (req, res) => res.json({ message: 'invalid api' }).status(400));
 
 app.listen(PORT, (err) => {
-  err ? process.exit(1) : console.log(`server running on port %d `, PORT);
+  err ? process.exit(1) : console.log(`server start at port: %d`, PORT);
 });
