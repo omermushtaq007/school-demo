@@ -31,17 +31,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const user = mongoose.model('user', userSchema);
-module.exports = user;
-/**
- * username
- * email address
- * password
- * token
- * image
- * address
- * roles model
- * phone number
- * restLink
- * email activation
- */
+const User = mongoose.model('user', userSchema);
+
+module.exports = User;

@@ -12,7 +12,7 @@ connect(); // database
  * @description   list of white IP address
  */
 const whiteList = [
-  process.env.NODE_ENV === 'production'
+  process.env.NODE_ENV === true
     ? console.log('production')
     : `http://localhost:${PORT}/`,
   'http://localhost:4200',
