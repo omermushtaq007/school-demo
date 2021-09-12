@@ -1,40 +1,9 @@
 const bcrypt = require('bcryptjs');
-const { check, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 require('dotenv').config();
-
-/**
- * @description     input validations
- * @param           req firstName, lastName, email, username, password
- * @returns         errors
- */
-exports.appValidations = [
-  check('firstName')
-    .notEmpty()
-    .isLength({ min: 3 })
-    .withMessage('this is required fields'),
-  check('lastName')
-    .notEmpty()
-    .isLength({ min: 2 })
-    .withMessage('this is required fields'),
-  check('username')
-    .notEmpty()
-    .isLength({ min: 2 })
-    .withMessage('this is required field'),
-  check('email')
-    .isEmail()
-    .withMessage('Invalid email address')
-    .notEmpty()
-    .withMessage('this is required field'),
-  check('password')
-    .isLength({ min: 8, max: 32 })
-    .withMessage('must be at least 8 to 32 chars long')
-    .matches(/^[A-Za-z0-9 .,'!&]+$/)
-    .withMessage('must contain a number'),
-];
-
 /**
  * @description  User Register Api
  * @param        req firstName, lastName, email, username, password
@@ -72,16 +41,17 @@ exports.authSignUp = async (req, res) => {
     });
 
     let salt = await bcrypt.genSalt();
-    
+
     user.password = await bcrypt.hash(password, salt);
-    
+
     await user.save();
-    
+
     const payload = {
       user: {
         id: user.id,
       },
     };
+
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
@@ -99,11 +69,47 @@ exports.authSignUp = async (req, res) => {
   }
 };
 
-exports.authLogin = (req, res) => {
+exports.authLogin = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.json(errors);
+  }
+
+  const { email, password } = req.body;
+
   try {
-    res.json({
-      message: 'login auth works',
+    let user = await User.findOne({
+      email: email,
     });
+
+    if (!user) {
+      return res.json({
+        message: 'invalid credentials',
+      });
+    }
+
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (!isMatched) {
+      return res.json({
+        message: 'invalid credentials',
+      });
+    }
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if (err) throw err;
+        return res.status(200).json({
+          token,
+        });
+      },
+    );
   } catch (err) {
     console.error(err);
     return res.status(500).json({
