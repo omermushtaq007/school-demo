@@ -81,13 +81,14 @@ exports.authLogin = async (req, res) => {
     let user = await User.findOne({
       email: email,
     });
-
+    // Checking user existence
     if (!user) {
       return res.json({
         message: 'invalid credentials',
       });
     }
 
+    // matching password
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
       return res.json({
@@ -110,6 +111,21 @@ exports.authLogin = async (req, res) => {
         });
       },
     );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: 'server internal error',
+    });
+  }
+};
+
+exports.authLogged = async (req, res) => {
+  try {
+    let user = await User.findById(req.user.id).select(['-_id', '-password']);
+    if (user) {
+      console.log(user);
+      return res.json(user).status(200);
+    }
   } catch (err) {
     console.error(err);
     return res.status(500).json({
