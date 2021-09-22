@@ -27,6 +27,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    roles: {
+      isAdmin: {
+        type: Boolean,
+        default: false,
+      },
+      isTeacher: {
+        type: Boolean,
+        default: false,
+      },
+      isStudent: {
+        type: Boolean,
+        default: false,
+      },
+      isVisitor: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   { timestamps: true },
 );

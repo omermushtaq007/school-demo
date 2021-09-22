@@ -1,37 +1,48 @@
 const router = require('express').Router();
-const authMiddleware = require('../auth.middleware');
 const {
   authLogin,
   authSignUp,
   authLogged,
+  changePassword,
 } = require('../controllers/auth.controller');
+
+// input validators
 const {
   firstName,
   lastName,
   email,
   password,
+  currentPassword,
   username,
-} = require('../controllers/validation');
+} = require('./validation');
+// middleware
+const { checkToken } = require('../auth.middleware');
 
 /**
  * @access    public
  * @path      { /api/auth/signup }
  */
 router.post(
-  '/signup', // path
-  [firstName, lastName, email, password, username], // validation
-  authSignUp, // controller
+  '/signup',
+  [firstName, lastName, email, password, username],
+  authSignUp,
 );
 
 /**
  * @access     public
  * @path       {/api/auth/login}
  */
-router.post(
-  '/login', // path
-  [email, password], // validators
-  authLogin, // controller
-);
+router.post('/login', [email, password], authLogin);
 
-router.get('/me', authMiddleware, authLogged);
+/**
+ * @access    private
+ * @path      {/api/auth/me}
+ */
+router.get('/me', checkToken, authLogged);
+
+/**
+ *
+ */
+router.put('/change-password', checkToken, [password], changePassword);
+
 module.exports = router;

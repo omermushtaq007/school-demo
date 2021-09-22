@@ -44,8 +44,8 @@ exports.authSignUp = async (req, res) => {
 
     user.password = await bcrypt.hash(password, salt);
 
-    await user.save();
-
+    console.log('user created!');
+    await user.save(); // user create
     const payload = {
       user: {
         id: user.id,
@@ -69,6 +69,11 @@ exports.authSignUp = async (req, res) => {
   }
 };
 
+/**
+ * @description  User Login Api
+ * @param        req email, password
+ * @param        res x-auth-token
+ */
 exports.authLogin = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -81,19 +86,23 @@ exports.authLogin = async (req, res) => {
     let user = await User.findOne({
       email: email,
     });
-    // Checking user existence
+
     if (!user) {
-      return res.json({
-        message: 'invalid credentials',
-      });
+      return res
+        .json({
+          message: 'invalid credentials',
+        })
+        .status(400);
     }
 
     // matching password
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
-      return res.json({
-        message: 'invalid credentials',
-      });
+      return res
+        .json({
+          message: 'invalid credentials',
+        })
+        .status(400);
     }
     const payload = {
       user: {
@@ -113,19 +122,86 @@ exports.authLogin = async (req, res) => {
     );
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      message: 'server internal error',
-    });
+    return res
+      .json({
+        message: 'server internal error',
+      })
+      .status(500);
   }
 };
 
+/**
+ * @param {*} req
+ * @param {*} res
+ * @returns user credentials
+ */
 exports.authLogged = async (req, res) => {
   try {
     let user = await User.findById(req.user.id).select(['-_id', '-password']);
     if (user) {
-      console.log(user);
+      console.log(req.user.id + ' user logged');
       return res.json(user).status(200);
     }
+  } catch (err) {
+    console.error(err);
+    return res
+      .json({
+        message: 'server internal error',
+      })
+      .status(500);
+  }
+};
+
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns change password
+ */
+exports.changePassword = async (req, res) => {
+  const { password, currentPassword } = req.body;
+  try {
+    let user = await User.findById(req.user.id).select(['-roles']);
+    if (!user || user == null) {
+      return res
+        .json({
+          message: 'user not found!',
+        })
+        .status(400);
+    }
+
+    let isMatched = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatched) {
+      return res
+        .json({
+          message: "password doesn't matched",
+        })
+        .status(400);
+    }
+
+    let salt = await bcrypt.genSalt();
+
+    let newPassword = (user.password = await bcrypt.hash(password, salt));
+
+    let changePassword = await User.updateOne({
+      id: user.id,
+      password: newPassword,
+    });
+
+    if (!changePassword) {
+      console.error(err.message);
+      return res
+        .json({
+          message: 'update unsuccessful',
+        })
+        .status(400);
+    }
+    await user.save();
+    return res
+      .json({
+        message: 'password change successfully',
+      })
+      .status(200);
   } catch (err) {
     console.error(err);
     return res.status(500).json({

@@ -33,3 +33,7 @@ exports.password = [
     .matches(/^[A-Za-z0-9 .,'!&]+$/)
     .withMessage('must contain a number'),
 ];
+
+exports.currentPassword = [
+  check('currentPassword').notEmpty().withMessage('this is required field'),
+];
