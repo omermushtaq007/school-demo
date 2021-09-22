@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const mailgun = require("mailgun-js");
 require('dotenv').config();
 /**
  * @description  User Register Api
@@ -159,6 +160,10 @@ exports.authLogged = async (req, res) => {
  * @returns change password
  */
 exports.changePassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.json(errors);
+  }
   const { password, currentPassword } = req.body;
   try {
     let user = await User.findById(req.user.id).select(['-roles']);
@@ -207,5 +212,27 @@ exports.changePassword = async (req, res) => {
     return res.status(500).json({
       message: 'server internal error',
     });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.json(errors);
+  }
+  const { email } = req.body;
+  try {
+    let user = await User.findOne({ email: email });
+    if (!user || user == null) {
+      return res.json({ message: 'invalid email' }).status(400);
+    }
+    
+  } catch (err) {
+    console.error(err);
+    return res
+      .json({
+        message: 'server internal error',
+      })
+      .status(500);
   }
 };

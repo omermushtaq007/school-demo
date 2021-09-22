@@ -4,6 +4,7 @@ const {
   authSignUp,
   authLogged,
   changePassword,
+  forgotPassword,
 } = require('../controllers/auth.controller');
 
 // input validators
@@ -43,6 +44,13 @@ router.get('/me', checkToken, authLogged);
 /**
  *
  */
-router.put('/change-password', checkToken, [password], changePassword);
+router.put(
+  '/change-password',
+  checkToken,
+  [currentPassword, password],
+  changePassword,
+);
+
+router.put('/forgot-password', [email], checkToken, forgotPassword);
 
 module.exports = router;
