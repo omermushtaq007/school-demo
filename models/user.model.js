@@ -45,6 +45,9 @@ const userSchema = new mongoose.Schema(
         default: true,
       },
     },
+    restLink: {
+      data: String,
+    },
   },
   { timestamps: true },
 );

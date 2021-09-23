@@ -1,10 +1,13 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
-const mailgun = require("mailgun-js");
-require('dotenv').config();
+const mailgun = require('mailgun-js');
+const Domain = process.env.MAIL_GUN_DOMAIN;
+const mg = mailgun({ apiKey: process.env.MAIL_GUN_API, domain: Domain });
+
 /**
  * @description  User Register Api
  * @param        req firstName, lastName, email, username, password
@@ -226,7 +229,39 @@ exports.forgotPassword = async (req, res) => {
     if (!user || user == null) {
       return res.json({ message: 'invalid email' }).status(400);
     }
-    
+
+    const restLink = jwt.sign(
+      { id: user.id },
+      process.env.PASSWORD_FORGOT_SECRET,
+      { expiresIn: '2m' },
+    );
+
+    const data = {
+      from: 'noreply@school.com',
+      to: email,
+      subject: 'Hello',
+      html: `<h1>hello world!</h1>
+             <p>${restLink}</p>`,
+    };
+
+    let resetPasswordRequest = await User.updateOne(
+      { _id: user.id },
+      { $set: { restLink: restLink } },
+    );
+    if (!resetPasswordRequest) {
+      console.error('invalid request');
+      return res
+        .json({
+          message: 'invalid request',
+        })
+        .status(400);
+    }
+    await mg.messages().send(data, (err, body) => {
+      if (err) {
+        console.error(err);
+      }
+      res.json({ message: 'sent!' });
+    });
   } catch (err) {
     console.error(err);
     return res

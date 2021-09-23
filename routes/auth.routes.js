@@ -51,6 +51,6 @@ router.put(
   changePassword,
 );
 
-router.put('/forgot-password', [email], checkToken, forgotPassword);
+router.put('/forgot-password', checkToken, [email], forgotPassword);
 
 module.exports = router;
