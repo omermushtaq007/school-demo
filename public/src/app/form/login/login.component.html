@@ -1,0 +1,15 @@
+<form class="border-2 border-success" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="w-50 mx-auto">
+  <div *ngFor="let item of input">
+    <div class="form-group mb-3">
+      <label [for]="item">{{ item }}: </label>
+      <input
+        type="email"
+        [id]="item"
+        [formControlName]="item"
+        class="form-control"
+        placeholder="Enter Your {{ item }}"
+      />
+    </div>
+  </div>
+  <button class="btn btn-success">Login</button>
+</form>

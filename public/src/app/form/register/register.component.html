@@ -1,0 +1,20 @@
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+  novalidate
+  class="w-50 mx-auto"
+>
+  <div *ngFor="let item of input">
+    <div class="form-group mb-3">
+      <label [for]="item">{{ item }}: </label>
+      <input
+        type="text"
+        [id]="item"
+        [formControlName]="item"
+        class="form-control"
+        placeholder="Enter Your {{ item }}"
+      />
+    </div>
+  </div>
+  <button class="btn btn-success">Register</button>
+</form>
