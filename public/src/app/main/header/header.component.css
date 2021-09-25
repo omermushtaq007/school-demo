@@ -5,3 +5,12 @@
 .btn {
   font-weight: 500;
 }
+
+.btn-outline-warning{
+  border: solid;
+}
+
+.btn-outline-warning:hover{
+  border: solid;
+  border-color: #ffc107;
+}

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  input: string[]= ['email', 'password']
-  constructor(private _fb: FormBuilder) {}
+  constructor(
+    private _fb: FormBuilder,
+    private dialogRef: MatDialogRef<LoginComponent>
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this._fb.group({
@@ -18,7 +21,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit(){
-    console.log(this.loginForm.value)
+  onSubmit() {
+    console.log(this.loginForm.value);
+  }
+
+  close() {
+    return this.dialogRef.close();
   }
 }

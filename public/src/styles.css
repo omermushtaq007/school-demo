@@ -2,7 +2,33 @@
 /* You can add global styles to this file, and also import other style files */
 /* for sidenav to take a whole page */
 
+.form-heading {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: .1rem;
+  text-decoration: underline;
+  text-align: center;
+  text-shadow: .2rem .1rem .2rem #000;
+}
 
+@media screen and (max-width: 350px) {
+  .form-heading {
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: .1rem;
+    text-decoration: underline;
+    text-align: center;
+    text-shadow: .2rem .1rem .2rem #000;
+  }
+
+  input {
+    width: 80vw;
+    letter-spacing: 1px;
+  }
+
+}
 
 
 

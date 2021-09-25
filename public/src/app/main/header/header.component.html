@@ -4,10 +4,8 @@
       <span class="text-warning">hello world!</span>
     </section>
     <section class="d-flex gap-3">
-      <button class="btn btn-outline-warning border-2" routerLink="login">
-        Login
-      </button>
-      <button class="btn btn-warning" routerLink="register">Join Now</button>
+      <button class="btn btn-outline-warning border-2" mat-button (click)="login()">Login</button>
+      <button class="btn btn-warning" mat-button (click)="register()">Join Now</button>
     </section>
   </section>
 </nav>
