@@ -21,8 +21,22 @@ export class AuthService {
     return this._http.post(this.env + '/api/auth/signup', data);
   }
 
-  authToken(token: string) {
+  login(data: object) {
+    console.log(data);
+
+    return this._http.post(this.env + '/api/auth/login', data);
+  }
+
+  setToken(token: string) {
     return localStorage.setItem('x-web-token', token);
+  }
+
+  get getToken() {
+    return localStorage.getItem('x-web-token');
+  }
+
+  removeToken() {
+    return localStorage.removeItem('x-web-token');
   }
 
   passwordChecker(password: string, confirmPassword: string) {
