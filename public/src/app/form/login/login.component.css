@@ -2,8 +2,6 @@ label {
   text-transform: capitalize;
 }
 
-
-
 mat-label {
   text-transform: capitalize;
 }
@@ -19,8 +17,7 @@ input::placeholder {
 }
 
 .loginSection {
-  position: relative;
-  width: 70vw;
+  width: 20vw;
 }
 
 mat-form-field {
@@ -36,13 +33,23 @@ mat-form-field {
   letter-spacing: .01rem;
 }
 
-.btn-justify{
-    display: flex;
-    justify-content: center;
+.btn-justify {
+  display: flex;
+  justify-content: center;
 }
 
-/* @media screen and (max-width: 350px) {
-  h1 {
+.form-heading {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: .1rem;
+  text-decoration: underline;
+  text-align: center;
+  text-shadow: .2rem .1rem .2rem #000;
+}
+
+@media screen and (max-width: 350px) {
+  .form-heading {
     text-transform: uppercase;
     font-weight: 900;
     font-size: 1.5rem;
@@ -51,9 +58,28 @@ mat-form-field {
     text-align: center;
     text-shadow: .2rem .1rem .2rem #000;
   }
+
   input {
     width: 80vw;
     letter-spacing: 1px;
   }
 
-} */
+}
+
+@media screen and (max-width: 1350px) {
+  .loginSection {
+    width: 30vw;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .loginSection {
+    width: 50vw;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .loginSection {
+    width: 70vw;
+  }
+}

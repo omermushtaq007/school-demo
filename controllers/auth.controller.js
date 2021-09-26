@@ -9,6 +9,14 @@ const Domain = process.env.MAIL_GUN_DOMAIN;
 const mg = mailgun({ apiKey: process.env.MAIL_GUN_API, domain: Domain });
 
 /**
+ * @description   entered value returns hash encryption value
+ * */
+const encryptPassword = async (password) => {
+  let salt = await bcrypt.genSalt();
+  return await bcrypt.hash(password, salt);
+};
+
+/**
  * @description  User Register Api
  * @param        req firstName, lastName, email, username, password
  * @param        res x-auth-token
@@ -16,7 +24,7 @@ const mg = mailgun({ apiKey: process.env.MAIL_GUN_API, domain: Domain });
 exports.authSignUp = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.json(errors);
+    res.json(errors).status(400);
   }
   try {
     const { firstName, lastName, email, username, password } = req.body;
@@ -24,9 +32,11 @@ exports.authSignUp = async (req, res) => {
     let user = await User.findOne({ email: email, username: username });
 
     if (user) {
-      return res.status(409).json({
-        message: 'this user already exists, try another email',
-      });
+      res
+        .json({
+          message: 'this user already exists, try another email',
+        })
+        .status(409);
     }
 
     let avatar = gravatar.url(email, {
@@ -44,9 +54,7 @@ exports.authSignUp = async (req, res) => {
       password,
     });
 
-    let salt = await bcrypt.genSalt();
-
-    user.password = await bcrypt.hash(password, salt);
+    user.password = await encryptPassword(password);
 
     console.log('user created!');
     await user.save(); // user create
@@ -62,14 +70,16 @@ exports.authSignUp = async (req, res) => {
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token }).status(200);
       },
     );
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      message: 'server internal error',
-    });
+    return res
+      .json({
+        message: 'server internal error',
+      })
+      .status(500);
   }
 };
 
@@ -81,47 +91,55 @@ exports.authSignUp = async (req, res) => {
 exports.authLogin = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.json(errors);
+    res.json(errors).status(400);
   }
 
   const { email, password } = req.body;
 
   try {
+    // Check user's email existence
+    // If email return user credentials
+    // else return invalid credentials
     let user = await User.findOne({
       email: email,
     });
 
     if (!user) {
-      return res
+      res
         .json({
           message: 'invalid credentials',
         })
         .status(400);
     }
 
-    // matching password
+    // checking entered password
+    // if password incorrect return invalid credentials
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
-      return res
+      res
         .json({
           message: 'invalid credentials',
         })
         .status(400);
     }
+
     const payload = {
       user: {
         id: user.id,
       },
     };
+
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        return res.status(200).json({
-          token,
-        });
+        res
+          .json({
+            token,
+          })
+          .status(200);
       },
     );
   } catch (err) {
@@ -143,8 +161,8 @@ exports.authLogged = async (req, res) => {
   try {
     let user = await User.findById(req.user.id).select(['-_id', '-password']);
     if (user) {
-      console.log(req.user.id + ' user logged');
-      return res.json(user).status(200);
+      console.log('user logged: ' + req.user.id);
+      res.json(user).status(200);
     }
   } catch (err) {
     console.error(err);
@@ -165,7 +183,7 @@ exports.authLogged = async (req, res) => {
 exports.changePassword = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.json(errors);
+    res.json(errors).status(400);
   }
   const { password, currentPassword } = req.body;
   try {
@@ -187,9 +205,7 @@ exports.changePassword = async (req, res) => {
         .status(400);
     }
 
-    let salt = await bcrypt.genSalt();
-
-    let newPassword = (user.password = await bcrypt.hash(password, salt));
+    let newPassword = (user.password = await encryptPassword(password));
 
     let changePassword = await User.updateOne({
       id: user.id,
@@ -198,7 +214,7 @@ exports.changePassword = async (req, res) => {
 
     if (!changePassword) {
       console.error(err.message);
-      return res
+      res
         .json({
           message: 'update unsuccessful',
         })
@@ -221,13 +237,13 @@ exports.changePassword = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.json(errors);
+    res.json(errors).status(400);
   }
   const { email } = req.body;
   try {
     let user = await User.findOne({ email: email });
-    if (!user || user == null) {
-      return res.json({ message: 'invalid email' }).status(400);
+    if (!user || user === null) {
+      res.json({ message: 'invalid email' }).status(400);
     }
 
     const restLink = jwt.sign(
@@ -250,7 +266,7 @@ exports.forgotPassword = async (req, res) => {
     );
     if (!resetPasswordRequest) {
       console.error('invalid request');
-      return res
+      res
         .json({
           message: 'invalid request',
         })
@@ -258,9 +274,9 @@ exports.forgotPassword = async (req, res) => {
     }
     await mg.messages().send(data, (err, body) => {
       if (err) {
-        console.error(err);
+        res.json(err).status(401);
       }
-      res.json({ message: 'sent!' });
+      res.json({ message: 'sent!' }).status(200);
     });
   } catch (err) {
     console.error(err);

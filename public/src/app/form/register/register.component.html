@@ -1,3 +1,123 @@
-<section>
+<section class="registerSection my-3">
   <h1 class="form-heading text-success fw-bold">register form</h1>
+  <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" novalidate>
+    <!-- Validator -->
+    <ng-container *ngIf="firstNameCtrl?.invalid && firstNameCtrl?.touched">
+      <span class="text-danger">This is required field</span>
+    </ng-container>
+    <!-- Start First Name -->
+    <mat-form-field appearance="outline">
+      <mat-label>first name:</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="firstName"
+        placeholder="enter your first name"
+      />
+    </mat-form-field>
+    <!-- End First Name -->
+
+    <!-- Validator -->
+    <ng-container *ngIf="lastNameCtrl?.invalid && lastNameCtrl?.touched">
+      <span class="text-danger">This is required field</span>
+    </ng-container>
+    <!-- Start Last Name -->
+    <mat-form-field appearance="outline">
+      <mat-label>last name:</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="lastName"
+        placeholder="enter your email address"
+      />
+    </mat-form-field>
+    <!-- End Last Name -->
+    <!-- Validator -->
+    <ng-container *ngIf="usernameCtrl?.invalid && usernameCtrl?.touched">
+      <span class="text-danger">This is required field</span>
+    </ng-container>
+    <!-- Start of User Name -->
+    <mat-form-field appearance="outline">
+      <mat-label>username:</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="username"
+        placeholder="enter your username"
+      />
+    </mat-form-field>
+    <!-- End Of User Name -->
+    <!-- Validator -->
+    <ng-container *ngIf="emailCtrl?.invalid && emailCtrl?.touched">
+      <span class="text-danger">This is required field</span>
+    </ng-container>
+    <!-- Start of Email -->
+    <mat-form-field appearance="outline">
+      <mat-label>email address</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="enter your email address"
+      />
+      <mat-hint>someone@example.com</mat-hint>
+    </mat-form-field>
+    <!-- End of Email -->
+    <!-- Validator -->
+    <ng-container *ngIf="passwordCtrl?.invalid && passwordCtrl?.touched">
+      <span class="text-danger">This is required field</span>
+    </ng-container>
+    <!-- start of password -->
+    <mat-form-field appearance="outline">
+      <mat-label>password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        autocomplete="on"
+        placeholder="enter your password"
+      />
+    </mat-form-field>
+    <!-- End of Password -->
+    <!-- Validator -->
+    <ng-container
+      *ngIf="
+        confirmPasswordCtrl?.invalid &&
+        (confirmPasswordCtrl?.touched || confirmPasswordCtrl?.dirty)
+      "
+    >
+      <span class="text-danger" *ngIf="confirmPasswordCtrl.errors?.required"
+        >This is required field</span
+      >
+      <span class="text-danger" *ngIf="confirmPasswordCtrl.errors?.minlength">
+        password must between 8 to 32 characters
+      </span>
+      <span class="text-danger" *ngIf="confirmPasswordCtrl.errors">
+        {{ confirmPasswordCtrl.errors | json }}
+      </span>
+    </ng-container>
+    <!-- start confirm password -->
+    <mat-form-field appearance="outline">
+      <mat-label>confirm password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="confirmPassword"
+        autocomplete="on"
+        placeholder="enter your password"
+      />
+    </mat-form-field>
+    <!-- end of confirm password -->
+    <!-- justify button -->
+    <div class="btn-justify">
+      <button
+        class="btn btn-warning"
+        mat-button
+        [disabled]="registerForm.invalid && registerForm.untouched"
+      >
+        register
+      </button>
+      <button class="btn btn-danger" mat-button (click)="close()">close</button>
+    </div>
+  </form>
 </section>

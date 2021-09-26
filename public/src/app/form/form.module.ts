@@ -11,15 +11,12 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 ];
 @NgModule({
-  declarations: [
-    LoginComponent,
-    RegisterComponent
-  ],
+  declarations: [LoginComponent, RegisterComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    RouterModule,
     ReactiveFormsModule,
-    MaterialModule
-  ]
+    MaterialModule,
+  ],
 })
-export class FormModule { }
+export class FormModule {}
