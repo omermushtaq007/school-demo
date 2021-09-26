@@ -24,11 +24,11 @@ export class LoginComponent implements OnInit {
     private _authService: AuthService,
     private dialogRef: MatDialogRef<LoginComponent>
   ) {
-    this.emailCtrl = this._fb.control('', [
+    this.emailCtrl = this._fb.control('umermushtaq3424@gmail.com', [
       Validators.required,
       Validators.email,
     ]);
-    this.passwordCtrl = this._fb.control('', [
+    this.passwordCtrl = this._fb.control('kingofyourcity9&', [
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(32),
@@ -36,8 +36,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.loginForm);
-
     this.loginForm = this._fb.group({
       email: this.emailCtrl,
       password: this.passwordCtrl,
@@ -45,8 +43,6 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log("this.loginForm.value");
-
     this._authService.login(this.loginForm.value).subscribe(
       (res: any) => {
         if (res.token) {

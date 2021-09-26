@@ -162,7 +162,7 @@ exports.authLogged = async (req, res) => {
     let user = await User.findById(req.user.id).select(['-_id', '-password']);
     if (user) {
       console.log('user logged: ' + req.user.id);
-      res.json(user).status(200);
+      res.json({user}).status(200);
     }
   } catch (err) {
     console.error(err);

@@ -3,9 +3,20 @@
     <section>
       <span class="text-warning">hello world!</span>
     </section>
-    <section class="d-flex gap-3">
-      <button class="btn btn-outline-warning border-2" mat-button (click)="login()">Login</button>
-      <button class="btn btn-warning" mat-button (click)="register()">Join Now</button>
-    </section>
+    <ng-container>
+      <section class="d-flex gap-3">
+        <button
+          class="btn btn-outline-warning border-2"
+          mat-button
+          (click)="login()"
+        >
+          Login
+        </button>
+        <button class="btn btn-warning" mat-button (click)="register()">
+          Join Now
+        </button>
+      </section>
+    </ng-container>
   </section>
 </nav>
+{{user | json}}

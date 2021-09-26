@@ -1,14 +1,8 @@
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-interface User {
-  id?: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-}
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { User } from '../common/user.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,21 +11,37 @@ export class AuthService {
   private env: string = environment.base_url;
   constructor(private _http: HttpClient) {}
 
-  register(data: User) {
+  register(data: Observable<User>) {
     return this._http.post(this.env + '/api/auth/signup', data);
   }
 
   login(data: object) {
-    console.log(data);
-
     return this._http.post(this.env + '/api/auth/login', data);
+  }
+
+  loggedUser() {
+    return this._http.get(this.env + '/api/auth/me', this.authHeader());
   }
 
   setToken(token: string) {
     return localStorage.setItem('x-web-token', token);
   }
 
-  get getToken() {
+  header(token: any) {
+    let requestOptions: Object = {
+      headers: new HttpHeaders().append('x-auth-token', token),
+      responseType: 'JSON',
+    };
+
+    return requestOptions;
+  }
+
+  authHeader() {
+    let hasToken = this.getToken();
+    return this.header(hasToken);
+  }
+
+  getToken() {
     return localStorage.getItem('x-web-token');
   }
 
