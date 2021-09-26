@@ -3,7 +3,11 @@
 }
 
 .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .btn-outline-warning{
@@ -13,4 +17,17 @@
 .btn-outline-warning:hover{
   border: solid;
   border-color: #ffc107;
+}
+
+.school-demo{
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: .1rem .1rem .1rem #000;
+  user-select: none;
+}
+
+.profileImage{
+  height: 2rem;
+  border-radius: 50%;
 }

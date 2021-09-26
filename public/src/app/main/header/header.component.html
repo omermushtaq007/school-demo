@@ -1,9 +1,17 @@
 <nav class="nav justify-content-between bg-success">
   <section class="container d-flex justify-content-between align-items-center">
     <section>
-      <span class="text-warning">hello world!</span>
+      <span class="text-warning school-demo">School Demo</span>
     </section>
-    <ng-container>
+    <ng-container *ngIf="user">
+      <button class="btn btn-warning" mat-button>
+        <picture>
+          <img [src]="user.avatar" alt="" loading="lazy" class="profileImage" />
+        </picture>
+        {{ user.firstName | titlecase }}
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!user">
       <section class="d-flex gap-3">
         <button
           class="btn btn-outline-warning border-2"
@@ -19,4 +27,4 @@
     </ng-container>
   </section>
 </nav>
-{{user | json}}
+{{ user | json }}

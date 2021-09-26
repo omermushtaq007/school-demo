@@ -15,15 +15,10 @@ export class HeaderComponent implements OnInit {
   constructor(private dialog: MatDialog, private _authService: AuthService) {}
 
   ngOnInit(): void {
-    this.userLogged();
-  }
-
-  userLogged() {
+    // this.userLogged();
     this._authService.loggedUser().subscribe(
       (res: any) => {
-        console.log(res['user']);
-        
-        this.user = res.user;
+        this.user = res;
       },
       (err: any) => {
         if (err.ok === false) {
@@ -32,6 +27,10 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
+
+  // userLogged() {
+
+  // }
 
   login() {
     const dialogRef = this.dialog.open(LoginComponent);

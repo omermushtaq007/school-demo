@@ -30,7 +30,7 @@ export class AuthService {
   header(token: any) {
     let requestOptions: Object = {
       headers: new HttpHeaders().append('x-auth-token', token),
-      responseType: 'JSON',
+      responseType: 'json',
     };
 
     return requestOptions;

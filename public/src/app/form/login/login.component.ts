@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         if (res.token) {
           this._authService.setToken(res.token);
+          this.close();
         }
       },
       (err) => console.log(err)

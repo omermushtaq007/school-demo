@@ -160,10 +160,11 @@ exports.authLogin = async (req, res) => {
 exports.authLogged = async (req, res) => {
   try {
     let user = await User.findById(req.user.id).select(['-_id', '-password']);
-    if (user) {
-      console.log('user logged: ' + req.user.id);
-      res.json({user}).status(200);
+    if (!user && user === null) {
+      res.json({ message: 'invalid credentials' }).status(404);
     }
+    console.log('user logged: ' + req.user.id);
+    return res.json(user).status(200);
   } catch (err) {
     console.error(err);
     return res
