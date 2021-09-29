@@ -12,18 +12,18 @@
       </button>
       <!-- menu button -->
       <mat-menu #menu="matMenu">
-        <ng-container *ngIf="user.roles.isAdmin === true">
+        <ng-container *ngIf="user.roles.isAdmin === false">
           <!-- admin button  -->
           <button mat-menu-item>
             <mat-icon>dashboard</mat-icon>
-            <span>Dashboard</span>
+            <span>Admin Dashboard</span>
           </button>
         </ng-container>
         <ng-container *ngIf="user.roles.isTeacher === false">
           <!-- admin button  -->
           <button mat-menu-item>
             <mat-icon>dashboard</mat-icon>
-            <span>Dashboard</span>
+            <span>Teacher Dashboard</span>
           </button>
         </ng-container>
         <ng-container *ngIf="user.roles.isStudent === false">
@@ -63,4 +63,4 @@
     </ng-container>
   </section>
 </nav>
-{{ user.roles | json }}
+<!-- {{ user.roles | json }} -->

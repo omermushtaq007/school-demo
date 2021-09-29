@@ -1,0 +1,22 @@
+ul {
+  padding: 10px;
+}
+
+mat-icon {
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  color: #fff;
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  display: flex;
+  text-transform: capitalize;
+  justify-content: center;
+  align-items: center;
+  transition: color .1s;
+}
+
+.nav-link:hover {
+  color: #198754;
+}
