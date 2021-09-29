@@ -41,4 +41,7 @@ export class HeaderComponent implements OnInit {
     const dialogRef = this.dialog.open(RegisterComponent);
     dialogRef.afterClosed();
   }
+  logout() {
+    this._authService.removeToken();
+  }
 }

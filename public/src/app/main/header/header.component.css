@@ -3,23 +3,30 @@
 }
 
 .btn {
+  padding: 3px 1rem;
   display: flex;
+  /* box-shadow: .1rem .1rem .1rem #000; */
   justify-content: center;
   align-items: center;
   font-weight: 500;
   letter-spacing: 1px;
 }
 
-.btn-outline-warning{
+.btn-warning {
+  box-shadow: .1rem .1rem .1rem #000;
+
+}
+
+.btn-outline-warning {
   border: solid;
 }
 
-.btn-outline-warning:hover{
+.btn-outline-warning:hover {
   border: solid;
   border-color: #ffc107;
 }
 
-.school-demo{
+.school-demo {
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -27,7 +34,11 @@
   user-select: none;
 }
 
-.profileImage{
-  height: 2rem;
+.profileImage {
+  height: 1.5rem;
   border-radius: 50%;
+}
+
+span {
+  text-transform: capitalize;
 }

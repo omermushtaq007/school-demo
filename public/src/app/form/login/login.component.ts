@@ -48,6 +48,9 @@ export class LoginComponent implements OnInit {
         if (res.token) {
           this._authService.setToken(res.token);
           this.close();
+          setInterval(() => {
+            location.reload();
+          }, 1000);
         }
       },
       (err) => console.log(err)

@@ -46,6 +46,7 @@ export class AuthService {
   }
 
   removeToken() {
+    location.reload();
     return localStorage.removeItem('x-web-token');
   }
 

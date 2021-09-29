@@ -4,12 +4,48 @@
       <span class="text-warning school-demo">School Demo</span>
     </section>
     <ng-container *ngIf="user">
-      <button class="btn btn-warning" mat-button>
+      <button class="btn btn-warning" [matMenuTriggerFor]="menu" mat-button>
         <picture>
           <img [src]="user.avatar" alt="" loading="lazy" class="profileImage" />
         </picture>
         {{ user.firstName | titlecase }}
       </button>
+      <!-- menu button -->
+      <mat-menu #menu="matMenu">
+        <ng-container *ngIf="user.roles.isAdmin === true">
+          <!-- admin button  -->
+          <button mat-menu-item>
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="user.roles.isTeacher === false">
+          <!-- admin button  -->
+          <button mat-menu-item>
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="user.roles.isStudent === false">
+          <!-- admin button  -->
+          <button mat-menu-item>
+            <mat-icon>dashboard</mat-icon>
+            <span>Student Dashboard</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="user.roles.isVisitor === true">
+          <!-- admin button  -->
+          <button mat-menu-item>
+            <mat-icon>assignment_turned_in</mat-icon>
+            <span>Let's Enroll</span>
+          </button>
+        </ng-container>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+      <!-- menu button -->
     </ng-container>
     <ng-container *ngIf="!user">
       <section class="d-flex gap-3">
@@ -27,4 +63,4 @@
     </ng-container>
   </section>
 </nav>
-{{ user | json }}
+{{ user.roles | json }}
